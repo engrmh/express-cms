@@ -6,7 +6,7 @@ const port = process.env.PORT;
 
 (async () => {
   await mongoose.connect(process.env.MONGO_URI);
-  console.log("Data Base Connected Successfully");
+  console.log("DataBase Connected Successfully");
 })();
 
 app.listen(port , () => {
