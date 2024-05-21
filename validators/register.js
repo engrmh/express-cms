@@ -12,6 +12,6 @@ const schema = {
   $$strict: true,
 };
 
-const registerCheck = v.compile(schema);
+const registerValidator = v.compile(schema);
 
-module.exports = registerCheck;
+module.exports = registerValidator;
