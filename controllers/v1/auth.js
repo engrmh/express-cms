@@ -1,7 +1,7 @@
 const userModel = require("../../models/user");
 const registerValidator = require("../../validators/register");
 const bcrypt = require("bcrypt");
-const jwt = require("jwt");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 exports.register = async (req, res) => {
