@@ -1,6 +1,8 @@
 const userModel = require("../../models/user");
 const registerValidator = require("../../validators/register");
 const bcrypt = require("bcrypt");
+const jwt = require("jwt");
+require("dotenv").config();
 
 exports.register = async (req, res) => {
   try {
@@ -28,6 +30,11 @@ exports.register = async (req, res) => {
       phone,
       role: userCounts > 0 ? "USER" : "ADMIN",
     });
+
+    const accessToken = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+      expiresIn: "30 day",
+    });
+    res.status(500), json({ newUser, accessToken });
   } catch (err) {
     res.status(500), json({ message: "Server Error" });
   }
