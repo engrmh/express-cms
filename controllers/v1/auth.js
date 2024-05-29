@@ -50,5 +50,35 @@ exports.register = async (req, res) => {
     return res.status(500).json({ message: "Server Error" });
   }
 };
-exports.login = async (req, res) => {};
+exports.login = async (req, res) => {
+  try {
+    const { identifier, password } = req.body;
+
+    const mainUser = await userModel.findOne({
+      $or: [
+        { username: identifier },
+        { email: identifier },
+        { phone: identifier },
+      ],
+    });
+
+    if (!mainUser) {
+      return res.status(401).json({ message: "User Not Found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, mainUser.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Data Not valid" });
+    }
+
+    const accessToken = jwt.sign({ id: mainUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "30 Day",
+    });
+
+    return res.status(200).json(accessToken);
+  } catch (err) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
 exports.getMe = async (req, res) => {};
