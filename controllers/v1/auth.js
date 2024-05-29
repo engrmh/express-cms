@@ -1,3 +1,4 @@
+const banModel = require("../../models/banPhone");
 const userModel = require("../../models/user");
 const registerValidator = require("../../validators/register");
 const bcrypt = require("bcrypt");
@@ -22,6 +23,12 @@ exports.register = async (req, res) => {
         .json({ message: "Username or email is duplicated" });
     }
 
+    const isUserBan = await banModel.findOne({ phone });
+
+    if (isUserBan) {
+      return res.status(409).json({ message: "This Phone Baned" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const userCounts = await userModel.count();
     const user = await userModel.create({
@@ -34,7 +41,7 @@ exports.register = async (req, res) => {
     });
 
     const newUser = user.toObject();
-    Reflect.deleteProperty(newUser, "password" );
+    Reflect.deleteProperty(newUser, "password");
     const accessToken = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
       expiresIn: "30 day",
     });
