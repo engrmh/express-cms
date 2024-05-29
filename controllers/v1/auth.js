@@ -13,16 +13,18 @@ exports.register = async (req, res) => {
 
     const { username, name, email, password, phone } = req.body;
 
-    const isUserExsit = userModel.findOne({
+    const isUserExsit = await userModel.findOne({
       $or: [{ username }, { email }],
     });
     if (isUserExsit) {
-      return res.status(409).json("Username or email is duplicated");
+      return res
+        .status(409)
+        .json({ message: "Username or email is duplicated" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const userCounts = await userModel.count();
-    const newUser = await userModel.create({
+    const user = await userModel.create({
       username,
       name,
       email,
@@ -31,12 +33,14 @@ exports.register = async (req, res) => {
       role: userCounts > 0 ? "USER" : "ADMIN",
     });
 
+    const newUser = user.toObject();
+    Reflect.deleteProperty(newUser, "password" );
     const accessToken = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
       expiresIn: "30 day",
     });
-    res.status(500), json({ newUser, accessToken });
+    return res.status(201).json({ newUser, accessToken });
   } catch (err) {
-    res.status(500), json({ message: "Server Error" });
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 exports.login = async (req, res) => {};
