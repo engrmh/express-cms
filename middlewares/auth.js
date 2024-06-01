@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user");
-module.exports = async (req, res, next) => {
+module.exports.authMiddleware = async (req, res, next) => {
   const authHeader = req.header("Authorization").split(" ");
   if (authHeader.length !== 2) {
     return res.status(403).json({ message: "Protected Route" });
