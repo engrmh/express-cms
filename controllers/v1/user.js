@@ -9,7 +9,7 @@ exports.banUser = async (req, res) => {
     phone: mainUser.phone,
   });
 
-  console.log(mainUser);
+  // console.log(mainUser);
 
   if (banResult) {
     return res.status(200).json({ message: "User Ban Successfully" });
