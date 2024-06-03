@@ -10,6 +10,10 @@ userRouter
   .get(authMiddleware, isAdminMiddleware, userController.getAll);
 
 userRouter
+  .route("/:id")
+  .post(authMiddleware, isAdminMiddleware, userController.removeUser);
+
+userRouter
   .route("/ban/:id")
   .post(authMiddleware, isAdminMiddleware, userController.banUser);
 
