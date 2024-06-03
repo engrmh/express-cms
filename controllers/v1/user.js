@@ -16,3 +16,19 @@ exports.banUser = async (req, res) => {
   }
   return res.status(500).json({ message: "Server Error" });
 };
+
+exports.getAll = async (req, res) => {
+  try {
+    const allUsers = await userModel.find({}).lean();
+
+    const fixedUsers = allUsers.map(user => {
+      const { password, ...data } = user;
+      return data;
+    });
+
+    return res.status(200).json({ data: fixedUsers });
+  } catch (err) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
