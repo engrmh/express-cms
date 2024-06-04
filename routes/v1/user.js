@@ -14,6 +14,10 @@ userRouter
   .post(authMiddleware, isAdminMiddleware, userController.removeUser);
 
 userRouter
+  .route("/role")
+  .put(authMiddleware, isAdminMiddleware, userController.changeRole);
+
+userRouter
   .route("/ban/:id")
   .post(authMiddleware, isAdminMiddleware, userController.banUser);
 
