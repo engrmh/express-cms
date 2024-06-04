@@ -12,8 +12,7 @@ categoryRouter
 
 categoryRouter
   .route("/:id")
-  .delete(authMiddleware, isAdminMiddleware, categoryController.remove)
+  .delete(authMiddleware, isAdminMiddleware, categoryController.delete)
   .put(authMiddleware, isAdminMiddleware, categoryController.update);
 
-
-  module.exports = categoryRouter
+module.exports = categoryRouter;
