@@ -7,7 +7,8 @@ const userRouter = express.Router();
 
 userRouter
   .route("/")
-  .get(authMiddleware, isAdminMiddleware, userController.getAll);
+  .get(authMiddleware, isAdminMiddleware, userController.getAll)
+  .put(authMiddleware, userController.updateUser);
 
 userRouter
   .route("/:id")
