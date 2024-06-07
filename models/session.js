@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 
-const sessionSchema = mongoose.Schema(
+const sessionSchema = new mongoose.Schema(
   {
     title: {
       type: String,
