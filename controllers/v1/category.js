@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-const categoryModel = require("../models/category");
+const categoryModel = require("../../models/category");
 
 exports.create = async (req, res) => {
   try {
