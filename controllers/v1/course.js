@@ -18,13 +18,12 @@ exports.create = async (req, res) => {
       status,
       discount,
       category,
-      creator,
     } = req.body;
 
     const result = await courseModel.create({
       title,
       description,
-      cover,
+      cover: req.file.filename,
       support,
       href,
       price,
@@ -35,9 +34,12 @@ exports.create = async (req, res) => {
     });
 
     if (result) {
+      const mainCourse = await courseModel
+        .findById(result._id)
+        .populate("creator", "-password");
       return res
         .status(201)
-        .json({ message: "Course Created Successfully", data: result });
+        .json({ message: "Course Created Successfully", data: mainCourse });
     }
   } catch (error) {
     res.status(500).json({ message: "Server Error" });

@@ -6,7 +6,7 @@ const port = process.env.PORT;
 
 (async () => {
   await mongoose.connect(process.env.MONGO_URI);
-  console.log("MongoDB Connecteda");
+  console.log("MongoDB Connected");
 })();
 
 app.listen(port , () => {

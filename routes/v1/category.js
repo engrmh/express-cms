@@ -1,5 +1,5 @@
 const express = require("express");
-const categoryController = require("./../../controllers/category");
+const categoryController = require("./../../controllers/v1/category");
 const { authMiddleware } = require("../../middlewares/auth");
 const { isAdminMiddleware } = require("../../middlewares/isAdmin ");
 
