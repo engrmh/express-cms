@@ -11,7 +11,6 @@ exports.create = async (req, res) => {
     const {
       title,
       description,
-      cover,
       support,
       href,
       price,
@@ -42,7 +41,7 @@ exports.create = async (req, res) => {
         .json({ message: "Course Created Successfully", data: mainCourse });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Server Error", error: error });
   }
 };
 exports.delete = async (req, res) => {

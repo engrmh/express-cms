@@ -11,7 +11,7 @@ const app = express();
 
 app.use(cors());
 app.use(
-  "courses/covers",
+  "/courses/covers",
   express.static(path.join(__dirname, "public", "courses", "covers"))
 );
 app.use(bodyParser.urlencoded({ extended: false }));
