@@ -27,4 +27,16 @@ courseRouter
   .delete(authMiddleware, isAdminMiddleware, courseController.delete)
   .put(authMiddleware, isAdminMiddleware, courseController.update);
 
+courseRouter.route("/:id/sessions").post(
+  // multer({
+  //   storage: multerStorage,
+  //   limits: {
+  //     fileSize: 100000000,
+  //   },
+  // }).single("video"),
+  authMiddleware,
+  isAdminMiddleware,
+  courseController.createSession
+);
+
 module.exports = courseRouter;

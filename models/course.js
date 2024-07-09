@@ -1,4 +1,4 @@
-const { default: mongoose, models } = require("mongoose");
+const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema(
   {
@@ -56,12 +56,12 @@ courseSchema.virtual("sessions", {
   foreignField: "course",
 });
 
-courseSchema.virtual('comments' , {
-    ref: 'Comment',
-    localField: '_id',
-    foreignField: 'course'
-})
+courseSchema.virtual("comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "course",
+});
 
-const courseModel = mongoose.Model("Course", courseSchema);
+const courseModel = mongoose.model("Course", courseSchema);
 
 module.exports = courseModel;

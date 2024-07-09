@@ -5,7 +5,7 @@ const crypto = require("crypto");
 module.exports = multer.diskStorage({
   destination: (req, file, cb) => {
     // Define the directory to store uploaded files
-    cb(null, path.join(__dirname, "public", "courses", "covers"));
+    cb(null, path.join(__dirname, "..", "public", "courses", "covers"));
   },
   filename: (req, file, cb) => {
     // Extract the file extension from the original file name

@@ -1,3 +1,6 @@
+const courseModel = require("../../models/course");
+const sessionModel = require("../../models/session");
+
 exports.getAll = async (req, res) => {
   try {
     const allCourses = await courseModel.find({}).lean();
@@ -41,7 +44,10 @@ exports.create = async (req, res) => {
         .json({ message: "Course Created Successfully", data: mainCourse });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server Error", error: error });
+    // console.log(error.message);
+    return res
+      .status(500)
+      .json({ message: "Server Error", error: error.message });
   }
 };
 exports.delete = async (req, res) => {
@@ -49,4 +55,26 @@ exports.delete = async (req, res) => {
 };
 exports.update = async (req, res) => {
   //code
+};
+
+exports.createSession = async (req, res) => {
+  try {
+    const { title, time, free } = req.body;
+    const { id } = req.params;
+
+    const session = await sessionModel.create({
+      title,
+      time,
+      free,
+      // video: req.file.filename,
+      video: "video.mp4",
+      course: id,
+    });
+
+    return res.status(201).json(session);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Server Error", error: error.message });
+  }
 };
