@@ -78,3 +78,17 @@ exports.createSession = async (req, res) => {
       .json({ message: "Server Error", error: error.message });
   }
 };
+
+exports.getAllSessions = async (req, res) => {
+  try {
+    const allSessions = await sessionModel
+      .find({})
+      .populate("course", "title")
+      .lean();
+    return res.status(200).json(allSessions);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Server Error", error: error.message });
+  }
+};
