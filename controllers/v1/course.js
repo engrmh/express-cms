@@ -92,3 +92,18 @@ exports.getAllSessions = async (req, res) => {
       .json({ message: "Server Error", error: error.message });
   }
 };
+
+exports.getSessionInfo = async (req, res) => {
+  try {
+    const course = await courseModel.findOne({ href: req.params.href }).lean();
+    const session = await sessionModel
+      .findOne({ _id: req.params.sessionId })
+      .select("-__v");
+    const allSessions = await sessionModel
+      .find({ course: course._id })
+      .select("-__v");
+    res.status(200).json({ session, allSessions });
+  } catch (error) {
+    res.status(500).json("Sever Error");
+  }
+};

@@ -14,6 +14,6 @@ module.exports.authMiddleware = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    return res.json(err);
+    return res.json({message: 'Token is expired or not login'});
   }
 };
