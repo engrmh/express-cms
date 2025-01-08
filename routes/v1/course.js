@@ -43,6 +43,10 @@ courseRouter
   .route("/sessions")
   .get(authMiddleware, isAdminMiddleware, courseController.getAllSessions);
 
+courseRouter.route("/:href/:sessionId").get(courseController.getSessionInfo);
 
-  courseRouter.route('/:href/:sessionId').get(courseController.getSessionInfo)
+courseRouter
+  .route("/session/:id")
+  .delete(authMiddleware, isAdminMiddleware, courseController.removeSession);
+
 module.exports = courseRouter;

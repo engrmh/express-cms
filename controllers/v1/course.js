@@ -1,3 +1,4 @@
+const { isValidObjectId } = require("mongoose");
 const courseModel = require("../../models/course");
 const sessionModel = require("../../models/session");
 
@@ -107,3 +108,21 @@ exports.getSessionInfo = async (req, res) => {
     res.status(500).json("Sever Error");
   }
 };
+
+exports.removeSession = async (req, res) => {
+  try {
+    const isValidId = isValidObjectId(req.params.id);
+    if (!isValidId) {
+      return res.status(400).json({ message: "In Valid Session ID" });
+    }
+    await sessionModel.deleteOne({ _id: req.params.id });
+    return res.status(200).json({ message: "Session deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error been eccurred", error: error });
+  }
+};
+
+
