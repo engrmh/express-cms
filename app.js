@@ -2,13 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const bodyParser = require("body-parser");
-// const swaggerUi = require("swagger-ui-express");
-// const swaggerDoc = require("./swagger.json");
-const authRouter = require("./routes/v1/auth");
-const userRouter = require("./routes/v1/user");
-const categoryRouter = require("./routes/v1/category");
-const courseRouter = require("./routes/v1/course");
-const commentRouter = require("./routes/v1/comment");
+const authRouter = require("./routes/v1/auth.route");
+const userRouter = require("./routes/v1/user.route");
+const categoryRouter = require("./routes/v1/category.route");
+const courseRouter = require("./routes/v1/course.route");
+const commentRouter = require("./routes/v1/comment.route");
+const swagger = require("./swagger");
+const winston = require("winston"),
+  expressWinston = require("express-winston");
 
 const app = express();
 
@@ -26,6 +27,23 @@ app.use("/v1/category", categoryRouter);
 app.use("/v1/course", courseRouter);
 app.use("/v1/comment", commentRouter);
 
-// app.use("/v1/api", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+app.use(
+  expressWinston.errorLogger({
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.json()
+    ),
+    // meta: true,
+    // msg: "HTTP {{req.method}} {{req.url}}",
+    // expressFormat: true,
+    // colorize: false,
+    // ignoreRoute: function (req, res) {
+    //   return false;
+    // },
+  })
+);
+
+swagger(app);
 
 module.exports = app;

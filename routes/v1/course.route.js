@@ -1,9 +1,9 @@
 const express = require("express");
-const courseController = require("../../controllers/v1/course");
+const courseController = require("../../controllers/v1/course.controller");
 const multer = require("multer");
-const multerStorage = require("./../../utils/uploader");
-const { authMiddleware } = require("../../middlewares/auth");
-const { isAdminMiddleware } = require("../../middlewares/isAdmin ");
+const multerStorage = require("../../utils/uploader");
+const { authMiddleware } = require("../../middlewares/auth.middeleware");
+const { isAdminMiddleware } = require("../../middlewares/isAdmin.middeleware");
 
 const courseRouter = express.Router();
 
@@ -23,9 +23,12 @@ courseRouter
   );
 
 courseRouter
-  .route("/:id")
-  .delete(authMiddleware, isAdminMiddleware, courseController.delete)
-  .put(authMiddleware, isAdminMiddleware, courseController.update);
+  .route("/sessions")
+  .get(authMiddleware, isAdminMiddleware, courseController.getAllSessions);
+
+courseRouter
+  .route("/category/:href")
+  .get(courseController.getCoursesByCategory);
 
 courseRouter.route("/:id/sessions").post(
   // multer({
@@ -39,14 +42,17 @@ courseRouter.route("/:id/sessions").post(
   courseController.createSession
 );
 
-courseRouter
-  .route("/sessions")
-  .get(authMiddleware, isAdminMiddleware, courseController.getAllSessions);
-
 courseRouter.route("/:href/:sessionId").get(courseController.getSessionInfo);
 
 courseRouter
   .route("/session/:id")
   .delete(authMiddleware, isAdminMiddleware, courseController.removeSession);
+
+courseRouter
+  .route("/:id")
+  .delete(authMiddleware, isAdminMiddleware, courseController.delete)
+  .put(authMiddleware, isAdminMiddleware, courseController.update);
+
+courseRouter.route("/:href").get(courseController.getOne);
 
 module.exports = courseRouter;

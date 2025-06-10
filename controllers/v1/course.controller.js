@@ -1,6 +1,8 @@
 const { isValidObjectId } = require("mongoose");
 const courseModel = require("../../models/course");
 const sessionModel = require("../../models/session");
+const categoryModel = require("../../models/category");
+const commentModel = require("../../models/comment");
 
 exports.getAll = async (req, res) => {
   try {
@@ -118,11 +120,73 @@ exports.removeSession = async (req, res) => {
     await sessionModel.deleteOne({ _id: req.params.id });
     return res.status(200).json({ message: "Session deleted successfully" });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res
       .status(500)
       .json({ message: "Error been eccurred", error: error });
   }
 };
 
+exports.getCoursesByCategory = async (req, res) => {
+  try {
+    const category = await categoryModel.findOne({ href: req.params.href });
 
+    if (category) {
+      const courses = await courseModel.find({ categoryID: category._id });
+      return res.status(200).json({ data: courses });
+    } else {
+      return res.status(404).json({ message: "Not Found!" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been eccurred", error: error });
+  }
+};
+
+exports.getOne = async (req, res) => {
+  try {
+    const { href } = req.params;
+    const currentCourse = await courseModel
+      .findOne({
+        href,
+      })
+      .populate("creator", "name -_id")
+      .populate("category", "title href -_id")
+      // .populate({ path: "creator", select: "name -_id" })
+      .select("-__v");
+    if (currentCourse) {
+      const courseSessions = await sessionModel
+        .find({
+          course: currentCourse._id,
+        })
+        .select("-_id -createdAt -updatedAt -__v")
+        .lean();
+      const courseAllComments = await commentModel
+        .find({
+          course: currentCourse._id,
+          isAccept: 1,
+        })
+        .populate("creator", "name -_id")
+        .select("body score -_id createdAt")
+        .lean();
+      return res.status(200).json({
+        data: {
+          currentCourse,
+          courseSessions,
+          courseAllComments,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        message: "Course Not Found",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+
+    return res
+      .status(500)
+      .json({ message: "Error been eccurred", error: error });
+  }
+};
