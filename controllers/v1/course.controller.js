@@ -3,6 +3,7 @@ const courseModel = require("../../models/course");
 const sessionModel = require("../../models/session");
 const categoryModel = require("../../models/category");
 const commentModel = require("../../models/comment");
+const courseUser = require("../../models/courseUser");
 
 exports.getAll = async (req, res) => {
   try {
@@ -170,11 +171,15 @@ exports.getOne = async (req, res) => {
         .populate("creator", "name -_id")
         .select("body score -_id createdAt")
         .lean();
+      const courseStudentCount = await courseUser
+        .find({ course: currentCourse._id })
+        .count();
       return res.status(200).json({
         data: {
           currentCourse,
           courseSessions,
           courseAllComments,
+          courseStudentCount,
         },
       });
     } else {
@@ -183,8 +188,37 @@ exports.getOne = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error been eccurred", error: error });
+  }
+};
 
+exports.register = async (req, res) => {
+  try {
+    const isUserAlreadyRegistered = await courseModel
+      .findOne({
+        user: req.user._id,
+        course: req.params.id,
+      })
+      .lean();
+
+    if (isUserAlreadyRegistered) {
+      return res.status(409).json({
+        message: "User Allready Registered This Course",
+      });
+    }
+
+    await courseModel.create({
+      user: req.user._id,
+      course: req.params.id,
+      price: req.body.price,
+    });
+
+    res.status(201).json({
+      message: "User Registered This Course Successfully",
+    });
+  } catch (error) {
     return res
       .status(500)
       .json({ message: "Error been eccurred", error: error });

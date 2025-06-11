@@ -49,6 +49,10 @@ courseRouter
   .delete(authMiddleware, isAdminMiddleware, courseController.removeSession);
 
 courseRouter
+  .route("/:id/register")
+  .post(authMiddleware, courseController.register);
+
+courseRouter
   .route("/:id")
   .delete(authMiddleware, isAdminMiddleware, courseController.delete)
   .put(authMiddleware, isAdminMiddleware, courseController.update);
