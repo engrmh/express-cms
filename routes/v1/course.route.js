@@ -57,6 +57,6 @@ courseRouter
   .delete(authMiddleware, isAdminMiddleware, courseController.delete)
   .put(authMiddleware, isAdminMiddleware, courseController.update);
 
-courseRouter.route("/:href").get(courseController.getOne);
+courseRouter.route("/:href").get(authMiddleware, courseController.getOne);
 
 module.exports = courseRouter;

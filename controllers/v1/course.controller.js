@@ -3,7 +3,7 @@ const courseModel = require("../../models/course");
 const sessionModel = require("../../models/session");
 const categoryModel = require("../../models/category");
 const commentModel = require("../../models/comment");
-const courseUser = require("../../models/courseUser");
+const courseUserModel = require("../../models/courseUser");
 
 exports.getAll = async (req, res) => {
   try {
@@ -55,7 +55,28 @@ exports.create = async (req, res) => {
   }
 };
 exports.delete = async (req, res) => {
-  //code
+  try {
+    const isValidId = isValidObjectId(req.params.id);
+    if (!isValidId) {
+      return res.status(400).json({ message: "In Valid Course ID" });
+    }
+
+    const course = await courseModel.findByIdAndDelete({
+      _id: req.params.id,
+    });
+
+    if (!course) {
+      return res.status(404).json({
+        message: "Course Not Found!",
+      });
+    }
+
+    return res.status(200).json({ message: "Course Deleted Successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been eccurred", error: error });
+  }
 };
 exports.update = async (req, res) => {
   //code
@@ -171,15 +192,21 @@ exports.getOne = async (req, res) => {
         .populate("creator", "name -_id")
         .select("body score -_id createdAt")
         .lean();
-      const courseStudentCount = await courseUser
+      const courseStudentCount = await courseUserModel
         .find({ course: currentCourse._id })
         .count();
+
+      const isUserRegisteredInThisCourse = await !!courseUserModel.findOne({
+        course: currentCourse._id,
+        user: req.user._id,
+      });
       return res.status(200).json({
         data: {
           currentCourse,
           courseSessions,
           courseAllComments,
           courseStudentCount,
+          isUserRegisteredInThisCourse,
         },
       });
     } else {
@@ -196,6 +223,10 @@ exports.getOne = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
+    const isValidId = isValidObjectId(req.params.id);
+    if (!isValidId) {
+      return res.status(400).json({ message: "In Valid Course ID" });
+    }
     const isUserAlreadyRegistered = await courseModel
       .findOne({
         user: req.user._id,
@@ -209,13 +240,13 @@ exports.register = async (req, res) => {
       });
     }
 
-    await courseModel.create({
+    await courseUserModel.create({
       user: req.user._id,
       course: req.params.id,
       price: req.body.price,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "User Registered This Course Successfully",
     });
   } catch (error) {
