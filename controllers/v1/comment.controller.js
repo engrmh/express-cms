@@ -1,3 +1,4 @@
+const { isValidObjectId } = require("mongoose");
 const commentModel = require("../../models/comment");
 const courseModel = require("../../models/course");
 
@@ -16,8 +17,63 @@ exports.create = async (req, res) => {
       isAccept: 0,
     });
 
-    res.status(201).json({ message: "Comment Added Successfully" });
+    return res.status(201).json({ message: "Comment Added Successfully" });
   } catch (error) {
-    res.status(500).json("Server Error");
+    return res
+      .status(500)
+      .json({ message: "Error been eccurred", error: error });
+  }
+};
+
+exports.remove = async (req, res) => {
+  try {
+    const isValidId = isValidObjectId(req.params.id);
+
+    if (!isValidId) {
+      return res.status(400).json({
+        message: "Comment Id Not Valid!!",
+      });
+    }
+
+    await commentModel.deleteOne({
+      _id: req.params.id,
+    });
+
+    return res.status(200).json({
+      message: "Comment Deleted Successfully",
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been eccurred", error: error });
+  }
+};
+
+exports.accept = async (req, res) => {
+  try {
+    const isValidId = isValidObjectId(req.params.id);
+
+    if (!isValidId) {
+      return res.status(400).json({
+        message: "Comment Id Not Valid!!",
+      });
+    }
+
+    await commentModel.updateOne(
+      {
+        _id: req.params.id,
+      },
+      {
+        isAccept: 1,
+      }
+    );
+
+    return res.status(200).json({
+      message: "Comment Accepted Successfully",
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been eccurred", error: error });
   }
 };
