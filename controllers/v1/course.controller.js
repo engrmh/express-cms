@@ -174,7 +174,7 @@ exports.getOne = async (req, res) => {
         href,
       })
       .populate("creator", "name -_id")
-      .populate("category", "title href -_id")
+      .populate("category", "title href _id")
       // .populate({ path: "creator", select: "name -_id" })
       .select("-__v");
     if (currentCourse) {
@@ -200,6 +200,16 @@ exports.getOne = async (req, res) => {
         course: currentCourse._id,
         user: req.user._id,
       });
+
+      const relatedCourses = await courseModel
+        .find({
+          category: currentCourse.category._id,
+          _id: {
+            $ne: currentCourse._id,
+          },
+        })
+        .select("-category -__v");
+
       return res.status(200).json({
         data: {
           currentCourse,
@@ -207,6 +217,7 @@ exports.getOne = async (req, res) => {
           courseAllComments,
           courseStudentCount,
           isUserRegisteredInThisCourse,
+          relatedCourses,
         },
       });
     } else {
@@ -227,7 +238,7 @@ exports.register = async (req, res) => {
     if (!isValidId) {
       return res.status(400).json({ message: "In Valid Course ID" });
     }
-    const isUserAlreadyRegistered = await courseModel
+    const isUserAlreadyRegistered = await courseUserModel
       .findOne({
         user: req.user._id,
         course: req.params.id,
@@ -236,7 +247,7 @@ exports.register = async (req, res) => {
 
     if (isUserAlreadyRegistered) {
       return res.status(409).json({
-        message: "User Allready Registered This Course",
+        message: "User Already Registered This Course",
       });
     }
 
