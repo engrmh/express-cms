@@ -281,6 +281,35 @@ exports.register = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error been eccurred", error: error });
+      .json({ message: "Error been occurred", error: error });
+  }
+};
+
+exports.populate = async (req, res) => {
+  try {
+    const courses = courseModel.find({
+      score: {
+        $gt: 4,
+      },
+    });
+
+    return res.status(200).json(courses);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been occurred", error: error });
+  }
+};
+exports.preSell = async (req, res) => {
+  try {
+    const courses = await courseModel.find({
+      status: "presell",
+    });
+
+    return res.status(200).json(courses);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been occurred", error: error });
   }
 };

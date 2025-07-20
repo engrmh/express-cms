@@ -26,6 +26,8 @@ courseRouter
   .route("/sessions")
   .get(authMiddleware, isAdminMiddleware, courseController.getAllSessions);
 
+courseRouter.route('/populate').get()
+
 courseRouter
   .route("/category/:href")
   .get(courseController.getCoursesByCategory);

@@ -29,10 +29,15 @@ const courseSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
+      enum: ["presell", "complated", "inprogress"],
     },
     discount: {
       type: Number,
       required: true,
+    },
+    score: {
+      type: Number,
+      default: 5,
     },
     category: {
       type: mongoose.Types.ObjectId,
