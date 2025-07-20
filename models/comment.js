@@ -16,17 +16,17 @@ const commentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    isAccept: {
-      type: Number,
-      default: 0,
-    },
     score: {
       type: Number,
       default: 5,
     },
+    isAccept: {
+      type: Number,
+      default: 0,
+    },
     isAnswer: {
       type: Number,
-      required: true,
+      default: 0,
     },
     mainCommentID: {
       type: mongoose.Types.ObjectId,

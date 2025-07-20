@@ -13,15 +13,13 @@ exports.create = async (req, res) => {
       course: course._id,
       score,
       creator: req.user._id,
-      isAnswer: 0,
-      isAccept: 0,
     });
 
     return res.status(201).json({ message: "Comment Added Successfully" });
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error been eccurred", error: error });
+      .json({ message: "Error been occurred", error: error });
   }
 };
 
@@ -74,6 +72,82 @@ exports.accept = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error been eccurred", error: error });
+      .json({ message: "Error been occurred", error: error });
+  }
+};
+
+exports.reject = async (req, res) => {
+  try {
+    const isValidId = isValidObjectId(req.params.id);
+
+    if (!isValidId) {
+      return res.status(400).json({
+        message: "Comment Id Not Valid!!",
+      });
+    }
+
+    const rejectedComment = await commentModel.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        isAccept: 1,
+      }
+    );
+
+    if (!rejectedComment) {
+      return res.status(404).json({
+        message: "Comment Not Found!",
+      });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been occurred", error: error });
+  }
+};
+
+exports.answer = async (req, res) => {
+  try {
+    const isValidId = isValidObjectId(req.params.id);
+
+    if (!isValidId) {
+      return res.status(400).json({
+        message: "Comment Id Not Valid!!",
+      });
+    }
+
+    const { body } = req.body;
+
+    const acceptedComment = await commentModel.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        isAccept: 0,
+      }
+    );
+
+    if (!acceptedComment) {
+      return res.status(404).json({
+        message: "Comment Not Found!",
+      });
+    }
+
+    const answerComment = await commentModel.create({
+      body,
+      course: acceptedComment.course._id,
+      score,
+      creator: req.user._id,
+      isAccept: 1,
+      isAccept: 1,
+      mainCommentID: acceptedComment._id,
+    });
+
+    return res.status(201).json({ message: "Comment Answered Successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been occurred", error: error });
   }
 };
