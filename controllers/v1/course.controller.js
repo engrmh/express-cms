@@ -175,8 +175,10 @@ exports.getOne = async (req, res) => {
       })
       .populate("creator", "name -_id")
       .populate("category", "title href _id")
+      .populate("category")
       // .populate({ path: "creator", select: "name -_id" })
       .select("-__v");
+
     if (currentCourse) {
       const courseSessions = await sessionModel
         .find({
@@ -184,6 +186,7 @@ exports.getOne = async (req, res) => {
         })
         .select("-_id -createdAt -updatedAt -__v")
         .lean();
+
       const courseAllComments = await commentModel
         .find({
           course: currentCourse._id,
@@ -192,14 +195,15 @@ exports.getOne = async (req, res) => {
         .populate("creator", "name -_id")
         .select("body score -_id createdAt")
         .lean();
+
       const courseStudentCount = await courseUserModel
         .find({ course: currentCourse._id })
         .count();
 
-      const isUserRegisteredInThisCourse = await !!courseUserModel.findOne({
+      const isUserRegisteredInThisCourse = !!(await courseUserModel.findOne({
         course: currentCourse._id,
         user: req.user._id,
-      });
+      }));
 
       const relatedCourses = await courseModel
         .find({
@@ -209,6 +213,20 @@ exports.getOne = async (req, res) => {
           },
         })
         .select("-category -__v");
+
+      let allComments = [];
+      courseAllComments.forEach((comment) => {
+        courseAllComments.forEach((answerComment) => {
+          if (String(comment._id) == String(answerComment.mainCommentID)) {
+            allComments.push({
+              ...comment,
+              creator: comment.creator.name,
+              course: comment.course.name,
+              answerComment,
+            });
+          }
+        });
+      });
 
       return res.status(200).json({
         data: {
