@@ -1,6 +1,7 @@
 const { isValidObjectId } = require("mongoose");
 const commentModel = require("../../models/comment");
 const courseModel = require("../../models/course");
+const { log } = require("winston");
 
 exports.create = async (req, res) => {
   try {
@@ -124,7 +125,8 @@ exports.answer = async (req, res) => {
         _id: req.params.id,
       },
       {
-        isAccept: 0,
+        isAccept: 1,
+        isAnswer: 1,
       }
     );
 
@@ -137,15 +139,57 @@ exports.answer = async (req, res) => {
     const answerComment = await commentModel.create({
       body,
       course: acceptedComment.course._id,
-      score,
       creator: req.user._id,
       isAccept: 1,
-      isAccept: 1,
+      isAnswer: 1,
       mainCommentID: acceptedComment._id,
     });
 
     return res.status(201).json({ message: "Comment Answered Successfully" });
   } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error been occurred", error: error });
+  }
+};
+
+exports.getAll = async (req, res) => {
+  try {
+    const comments = await commentModel
+      .find({
+        isAccept: 1,
+      })
+      // .populate("course", "-__v")
+      // .populate("creator", "-password -__v")
+      .select("-__v")
+      .lean();
+
+    let allCommentsHaveAnswer = [];
+    let allCommentsNoHaveAnswer = [];
+    comments.forEach((comment, i, array) => {
+      array.forEach((answerComment) => {
+        if (String(comment._id) == String(answerComment.mainCommentID)) {
+          allCommentsHaveAnswer.push({
+            ...comment,
+            answerComment,
+          });
+        }
+      });
+    });
+
+    comments.forEach((comment) => {
+      if (!comment.mainCommentID) {
+        allCommentsNoHaveAnswer.push({
+          ...comment,
+        });
+      }
+    });
+
+    return res
+      .status(200)
+      .json([...allCommentsHaveAnswer, ...allCommentsNoHaveAnswer]);
+  } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ message: "Error been occurred", error: error });

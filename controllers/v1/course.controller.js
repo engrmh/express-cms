@@ -175,7 +175,6 @@ exports.getOne = async (req, res) => {
       })
       .populate("creator", "name -_id")
       .populate("category", "title href _id")
-      .populate("category")
       // .populate({ path: "creator", select: "name -_id" })
       .select("-__v");
 
@@ -193,7 +192,8 @@ exports.getOne = async (req, res) => {
           isAccept: 1,
         })
         .populate("creator", "name -_id")
-        .select("body score -_id createdAt")
+        .populate("course", "-__v")
+        .select("body score name -_id createdAt")
         .lean();
 
       const courseStudentCount = await courseUserModel
@@ -214,11 +214,12 @@ exports.getOne = async (req, res) => {
         })
         .select("-category -__v");
 
-      let allComments = [];
-      courseAllComments.forEach((comment) => {
-        courseAllComments.forEach((answerComment) => {
+      let allCommentsHaveAnswer = [];
+      let allCommentsNoHaveAnswer = [];
+      courseAllComments.forEach((comment, i, array) => {
+        array.forEach((answerComment) => {
           if (String(comment._id) == String(answerComment.mainCommentID)) {
-            allComments.push({
+            allCommentsHaveAnswer.push({
               ...comment,
               creator: comment.creator.name,
               course: comment.course.name,
@@ -228,11 +229,24 @@ exports.getOne = async (req, res) => {
         });
       });
 
+      courseAllComments.forEach((comment) => {
+        if (!comment.mainCommentID) {
+          allCommentsNoHaveAnswer.push({
+            ...comment,
+            creator: comment.creator.name,
+            course: comment.course.name,
+          });
+        }
+      });
+
       return res.status(200).json({
         data: {
           currentCourse,
           courseSessions,
-          courseAllComments,
+          courseAllComments: [
+            ...allCommentsHaveAnswer,
+            ...allCommentsNoHaveAnswer,
+          ],
           courseStudentCount,
           isUserRegisteredInThisCourse,
           relatedCourses,
@@ -300,6 +314,7 @@ exports.populate = async (req, res) => {
       .json({ message: "Error been occurred", error: error });
   }
 };
+
 exports.preSell = async (req, res) => {
   try {
     const courses = await courseModel.find({

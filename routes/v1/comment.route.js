@@ -5,7 +5,10 @@ const { isAdminMiddleware } = require("../../middlewares/isAdmin.middeleware");
 
 const commentRouter = express.Router();
 
-commentRouter.route("/").post(authMiddleware, commentController.create);
+commentRouter
+  .route("/")
+  .post(authMiddleware, commentController.create)
+  .get(authMiddleware, isAdminMiddleware, commentController.getAll);
 commentRouter
   .route("/:id")
   .delete(authMiddleware, isAdminMiddleware, commentController.remove);
@@ -17,6 +20,6 @@ commentRouter
   .put(authMiddleware, isAdminMiddleware, commentController.reject);
 commentRouter
   .route("/:id/answer")
-  .post(authMiddleware, isAdminMiddleware, commentController.reject);
+  .post(authMiddleware, isAdminMiddleware, commentController.answer);
 
 module.exports = commentRouter;
