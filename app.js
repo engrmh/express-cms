@@ -10,6 +10,7 @@ const commentRouter = require("./routes/v1/comment.route");
 const swagger = require("./swagger");
 const winston = require("winston"),
   expressWinston = require("express-winston");
+const contactRouter = require("./routes/v1/contact.route");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/v1/users", userRouter);
 app.use("/v1/category", categoryRouter);
 app.use("/v1/course", courseRouter);
 app.use("/v1/comment", commentRouter);
+app.use("/v1/contact", contactRouter);
 
 app.use(
   expressWinston.errorLogger({
