@@ -5,7 +5,7 @@ exports.getAll = async function (req, res) {
     const allData = await newsletterModel.find({});
     return res.status(200).json(allData);
   } catch (e) {
-    return res.status(500).json({ message: "error been occurred", error: e });
+    return res.status(500).json({ message: "Error been occurred", error: e });
   }
 };
 
@@ -19,6 +19,6 @@ exports.create = async function (req, res) {
 
     return res.status(201).json({ message: "Added in newsletter" });
   } catch (e) {
-    return res.status(500).json({ message: "error occurred", error: e });
+    return res.status(500).json({ message: "Error been occurred", error: e });
   }
 };
