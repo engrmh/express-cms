@@ -13,6 +13,7 @@ const winston = require("winston"),
 const contactRouter = require("./routes/v1/contact.route");
 const newsletterRouter = require("./routes/v1/newsletter.route");
 const searchRouter = require("./routes/v1/search.route");
+const notificationRouter = require("./routes/v1/notification.route");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/v1/comment", commentRouter);
 app.use("/v1/contact", contactRouter);
 app.use("/v1/newsletter", newsletterRouter);
 app.use("/v1/search", searchRouter);
+app.use("/v1/notification", notificationRouter);
 
 app.use(
   expressWinston.errorLogger({
