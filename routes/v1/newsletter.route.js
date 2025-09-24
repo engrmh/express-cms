@@ -1,4 +1,4 @@
-const express = require("express");
+ const express = require("express");
 const { authMiddleware } = require("../../middlewares/auth.middeleware");
 const { isAdminMiddleware } = require("../../middlewares/isAdmin.middeleware");
 const newsletterController = require("../../controllers/v1/newsletter.controller");
