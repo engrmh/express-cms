@@ -1,23 +1,47 @@
-exports.categoryPath = {
-  "/category": {
-    post: {
-      summary: "Create Category",
-      tags: ["Category"],
+exports.userPath = {
+  "/users": {
+    get: {
+      summary: "Get All Users",
+      tags: ["Users"],
+      responses: {
+        200: {
+          description: "Users Data",
+        },
+        500: {
+          description: "Server Error",
+        },
+      },
+    },
+    put: {
+      summary: "Update User",
+      tags: ["Users"],
       requestBody: {
         required: true,
         content: {
           "application/json": {
             schema: {
               type: "object",
-              required: ["title", "href"],
+              required: ["name", "username", "email", "password", "phone"],
               properties: {
-                title: {
+                name: {
                   type: "string",
-                  example: "بکند",
+                  example: "John Doe",
                 },
-                href: {
+                username: {
                   type: "string",
-                  example: "backend",
+                  example: "JohnDoe",
+                },
+                email: {
+                  type: "string",
+                  example: "sample@domain.com",
+                },
+                phone: {
+                  type: "string",
+                  example: "09119111234",
+                },
+                password: {
+                  type: "string",
+                  example: "12345678",
                 },
               },
             },
@@ -26,19 +50,7 @@ exports.categoryPath = {
       },
       responses: {
         201: {
-          description: "Category Created Successfully",
-        },
-        500: {
-          description: "Server Error",
-        },
-      },
-    },
-    get: {
-      summary: "Get All Category",
-      tags: ["Category"],
-      responses: {
-        200: {
-          description: "All Category",
+          description: "User Updated Successfully",
         },
         500: {
           description: "Server Error",
@@ -46,10 +58,10 @@ exports.categoryPath = {
       },
     },
   },
-  "/category/{id}": {
-    put: {
-      summary: "Update Category",
-      tags: ["Category"],
+  "/users/{id}": {
+    delete: {
+      summary: "Delete User",
+      tags: ["Users"],
       parameters: [
         {
           in: "path",
@@ -59,45 +71,26 @@ exports.categoryPath = {
           },
         },
       ],
-      requestBody: {
-        required: true,
-        content: {
-          "application/json": {
-            schema: {
-              type: "object",
-              required: ["title", "href"],
-              properties: {
-                title: {
-                  type: "string",
-                  example: "بکند",
-                },
-                href: {
-                  type: "string",
-                  example: "backend",
-                },
-              },
-            },
-          },
-        },
-      },
       responses: {
         200: {
-          description: "Updated Successfully",
+          description: "User Removed Successfully",
         },
         404: {
-          description: "Category Not Found!!",
+          description: "User Not Found!!",
         },
         409: {
-          description: "Category ID Not Valid!!",
+          description: "User ID Not Valid!!",
         },
         500: {
           description: "Server Error",
         },
       },
     },
-    delete: {
-      summary: "Update Category",
-      tags: ["Category"],
+  },
+  "/users/role": {
+    put: {
+      summary: "Change User Role",
+      tags: ["Users"],
       parameters: [
         {
           in: "path",
@@ -109,13 +102,42 @@ exports.categoryPath = {
       ],
       responses: {
         200: {
-          description: "Deleted Successfully",
+          description: "User Role Updated Successfully",
         },
         404: {
-          description: "Category Not Found!!",
+          description: "User Not Found!!",
         },
         409: {
-          description: "Category ID Not Valid!!",
+          description: "User ID Not Valid!!",
+        },
+        500: {
+          description: "Server Error",
+        },
+      },
+    },
+  },
+  "/users/ban/{id}": {
+    post: {
+      summary: "Ban A User",
+      tags: ["Users"],
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          schema: {
+            type: "string",
+          },
+        },
+      ],
+      responses: {
+        200: {
+          description: "User Baned Successfully",
+        },
+        404: {
+          description: "User Not Found!!",
+        },
+        409: {
+          description: "User ID Not Valid!!",
         },
         500: {
           description: "Server Error",
