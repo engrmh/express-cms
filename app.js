@@ -2,12 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const path = require("node:path");
 const bodyParser = require("body-parser");
+const swaggerUi = require("swagger-ui-express");
+const swaggerOption = require("./docs/swagger");
 const authRouter = require("./routes/v1/auth.route");
 const userRouter = require("./routes/v1/user.route");
 const categoryRouter = require("./routes/v1/category.route");
 const courseRouter = require("./routes/v1/course.route");
 const commentRouter = require("./routes/v1/comment.route");
-const swagger = require("./swagger");
 const winston = require("winston"),
   expressWinston = require("express-winston");
 const contactRouter = require("./routes/v1/contact.route");
@@ -24,6 +25,7 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerOption));
 
 app.use("/v1/auth", authRouter);
 app.use("/v1/users", userRouter);
@@ -51,7 +53,5 @@ app.use(
     // },
   })
 );
-
-swagger(app);
 
 module.exports = app;

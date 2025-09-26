@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user");
+
 module.exports.authMiddleware = async (req, res, next) => {
   const authHeader = req.header("Authorization")?.split(" ");
   if (authHeader?.length !== 2) {
@@ -14,6 +15,6 @@ module.exports.authMiddleware = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    return res.json({message: 'Token is expired or not login'});
+    return res.json({ message: "Token is expired or not login" });
   }
 };

@@ -27,7 +27,7 @@ exports.delete = async (req, res) => {
   try {
     const isValidID = mongoose.Types.ObjectId.isValid(req.params.id);
     if (!isValidID) {
-      return res.status(409).json({ message: "User ID Not Valid!!" });
+      return res.status(409).json({ message: "Category ID Not Valid!!" });
     }
 
     const deletedCategory = await categoryModel.findByIdAndRemove({
