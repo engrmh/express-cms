@@ -46,7 +46,7 @@ exports.contactPath = {
       tags: ["Contacts"],
       responses: {
         201: {
-          description: "Contacts Created Successfully",
+          description: "Contacts",
         },
         500: {
           description: "Server Error",

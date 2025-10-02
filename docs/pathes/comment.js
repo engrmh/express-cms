@@ -42,7 +42,7 @@ exports.commentPath = {
       tags: ["Comments"],
       responses: {
         201: {
-          description: "Comment Created Successfully",
+          description: "Comments",
         },
         500: {
           description: "Server Error",
