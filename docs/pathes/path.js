@@ -5,6 +5,7 @@ const { userPath } = require("../pathes/user");
 const { commentPath } = require("../pathes/comment");
 const { contactPath } = require("../pathes/contact");
 const { newsletterPath } = require("../pathes/newsletter");
+const { notificationPath } = require("../pathes/notification");
 
 const pathes = {
   ...authPath,
@@ -13,6 +14,7 @@ const pathes = {
   ...commentPath,
   ...contactPath,
   ...newsletterPath,
+  ...notificationPath,
   ...offPath,
 };
 
