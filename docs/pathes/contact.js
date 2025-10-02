@@ -67,6 +67,17 @@ exports.contactPath = {
           },
         },
       ],
+      responses: {
+        200: {
+          description: "Contact deleted successfully",
+        },
+        400: {
+          description: "Message ID not valid!!",
+        },
+        500: {
+          description: "Server Error",
+        },
+      },
     },
   },
   "/contact/answer/{id}": {
@@ -101,6 +112,17 @@ exports.contactPath = {
               },
             },
           },
+        },
+      },
+      responses: {
+        201: {
+          description: "Email sent successfully",
+        },
+        400: {
+          description: "Message ID not valid!!",
+        },
+        500: {
+          description: "Server Error",
         },
       },
     },

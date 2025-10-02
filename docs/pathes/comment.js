@@ -63,6 +63,17 @@ exports.commentPath = {
           },
         },
       ],
+      responses: {
+        200: {
+          description: "Comment deleted successfully",
+        },
+        400: {
+          description: "Comment ID not valid!!",
+        },
+        500: {
+          description: "Server Error",
+        },
+      },
     },
   },
   "/comment/{id}/accept": {
@@ -78,6 +89,20 @@ exports.commentPath = {
           },
         },
       ],
+      responses: {
+        200: {
+          description: "Comment accepted successfully",
+        },
+        400: {
+          description: "Comment ID not valid!!",
+        },
+        404: {
+          description: "Comment Not found!!",
+        },
+        500: {
+          description: "Server Error",
+        },
+      },
     },
   },
   "/comment/{id}/reject": {
@@ -93,6 +118,20 @@ exports.commentPath = {
           },
         },
       ],
+      responses: {
+        200: {
+          description: "Comment rejected successfully",
+        },
+        400: {
+          description: "Comment ID not valid!!",
+        },
+        404: {
+          description: "Comment Not found!!",
+        },
+        500: {
+          description: "Server Error",
+        },
+      },
     },
   },
   "/comment/{id}/answer": {
@@ -123,6 +162,20 @@ exports.commentPath = {
               },
             },
           },
+        },
+      },
+      responses: {
+        200: {
+          description: "Comment answered successfully",
+        },
+        400: {
+          description: "Comment ID not valid!!",
+        },
+        404: {
+          description: "Comment Not found!!",
+        },
+        500: {
+          description: "Server Error",
         },
       },
     },
