@@ -92,7 +92,7 @@ exports.reject = async (req, res) => {
         _id: req.params.id,
       },
       {
-        isAccept: 1,
+        isAccept: 0,
       }
     );
 

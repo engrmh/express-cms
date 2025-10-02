@@ -1,7 +1,7 @@
 const pathes = require("./pathes/path");
 
 const swaggerOptions = {
-  openapi: "3.1.0",
+  openapi: "3.0.0",
   info: {
     title: "CMS Backend",
     version: "1.0.0",
