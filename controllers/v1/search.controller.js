@@ -3,7 +3,7 @@ const courseModel = require("../../models/course");
 exports.get = async (req, res) => {
   try {
     const { keyword } = req.params;
-    console.log(keyword);
+    // console.log(keyword);
     const allCourse = await courseModel.find({
       title: {
         $regex: ".*" + keyword + ".*",
