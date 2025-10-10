@@ -21,8 +21,25 @@ exports.offPath = {
           "application/json": {
             schema: {
               type: "object",
-              required: [""],
-              properties: {},
+              required: ["code", "percent", "course", "max"],
+              properties: {
+                code: {
+                  type: "string",
+                  example: " off200t",
+                },
+                percent: {
+                  type: "number",
+                  example: "40",
+                },
+                course: {
+                  type: "string",
+                  example: "courseID",
+                },
+                max: {
+                  type: "string",
+                  example: "4",
+                },
+              },
             },
           },
         },
