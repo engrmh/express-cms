@@ -45,6 +45,12 @@ exports.register = async (req, res) => {
     const accessToken = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
       expiresIn: "30 day",
     });
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     return res.status(201).json({ newUser, accessToken });
   } catch (err) {
     return res.status(500).json({ message: "Server Error" });
@@ -76,7 +82,14 @@ exports.login = async (req, res) => {
       expiresIn: "30 Day",
     });
 
-    return res.status(200).json(accessToken);
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({ code: 200, message: "Login Successfully" });
   } catch (err) {
     res.status(500).json({ message: "Server Error" });
   }

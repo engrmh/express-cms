@@ -4,6 +4,9 @@ const offModel = require("../../models/off");
 
 exports.getAll = async (_, res) => {
   try {
+    const allDiscount = await offModel.find({}).lean();
+
+    return res.status(200).json({ code: 200, data: allDiscount });
   } catch (error) {
     return res.status(500).json({
       code: 500,
@@ -14,20 +17,19 @@ exports.getAll = async (_, res) => {
 exports.create = async (req, res) => {
   try {
     const { code, percent, course, max } = req.body;
-    const isValidCourseId = isValidObjectId(course)
+    const isValidCourseId = isValidObjectId(course);
 
-    if(!isValidCourseId)
+    if (!isValidCourseId)
+      await offModel.create({
+        code,
+        course,
+        percent,
+        max,
+        uses: 0,
+        creator: req.user._id,
+      });
 
-    await offModel.create({
-      code,
-      course,
-      percent,
-      max,
-      uses: 0,
-      creator: req.user._id,
-    });
-
-    res
+    return res
       .status(201)
       .json({ code: 201, message: "Discount Created Successfully" });
   } catch (error) {
@@ -45,7 +47,9 @@ exports.setOnAll = async (req, res) => {
       discount,
     });
 
-    res.status(200).json({ code: 200, message: "Discount Seted Successfully" });
+    return res
+      .status(200)
+      .json({ code: 200, message: "Discount Seted Successfully" });
   } catch (error) {
     return res.status(500).json({
       code: 500,

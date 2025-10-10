@@ -77,11 +77,11 @@ exports.authPath = {
               properties: {
                 identifier: {
                   type: "string",
-                  example: "09119111234",
+                  example: "engrmh24",
                 },
                 password: {
                   type: "string",
-                  example: "12345678",
+                  example: "123456789",
                 },
               },
             },

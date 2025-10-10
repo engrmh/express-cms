@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("node:path");
 const bodyParser = require("body-parser");
+// const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerOption = require("./docs/swagger");
 const authRouter = require("./routes/v1/auth.route");
@@ -26,6 +27,7 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+// app.use(cookieParser());
 app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerOption));
 
 app.use("/v1/auth", authRouter);
