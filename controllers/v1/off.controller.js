@@ -81,6 +81,34 @@ exports.setOnAll = async (req, res) => {
 };
 exports.getOne = async (req, res) => {
   try {
+    const { code } = req.params;
+    const { course } = req.body;
+
+    const isValidCourseId = isValidObjectId(course);
+
+    if (!isValidCourseId) {
+      return res
+        .status(400)
+        .json({ code: 400, message: "Course Id is not valid!" });
+    }
+
+    const off = await offModel.findOne({ code, course }).select("-__v");
+    if (!off) {
+      return res.status(404).json({ code: 404, message: "Code is not valid" });
+    }
+
+    if (off.max === off.uses) {
+      return res
+        .status(406)
+        .json({ code: 406, message: "This code already used" });
+    }
+    await offModel.findOneAndUpdate(
+      { code, course },
+      {
+        uses: off.uses + 1,
+      }
+    );
+    return res.status(200).json({ code: 200, data: off });
   } catch (error) {
     return res.status(500).json({
       code: 500,
@@ -90,7 +118,7 @@ exports.getOne = async (req, res) => {
 };
 exports.remove = async (req, res) => {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
 
     const isValidOffId = isValidObjectId(id);
 
@@ -116,7 +144,3 @@ exports.remove = async (req, res) => {
     });
   }
 };
-// exports.getAll = async (req, res) => {
-//   try {
-//   } catch (error) {}
-// };

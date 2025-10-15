@@ -100,19 +100,42 @@ exports.offPath = {
       tags: ["Offs"],
       parameters: [
         {
-          in: "query",
+          in: "path",
           name: "code",
           schema: {
             type: "string",
           },
         },
       ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["course"],
+              properties: {
+                course: {
+                  type: "string",
+                  example: "courseID",
+                },
+              },
+            },
+          },
+        },
+      },
       responses: {
         200: {
-          description: "",
+          description: "Current Off",
         },
         400: {
+          description: "Course ID not valid!!",
+        },
+        404: {
           description: "Code not valid!!",
+        },
+        406: {
+          description: "This code already used",
         },
         500: {
           description: "Server Error",
@@ -126,7 +149,7 @@ exports.offPath = {
       tags: ["Offs"],
       parameters: [
         {
-          in: "query",
+          in: "path",
           name: "id",
           schema: {
             type: "string",
