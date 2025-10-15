@@ -46,7 +46,16 @@ exports.offPath = {
       },
       responses: {
         201: {
-          description: "Added Successfully",
+          description: "Success",
+        },
+        400: {
+          description: "Bad Request",
+        },
+        404: {
+          description: "Not Found",
+        },
+        409: {
+          description: "Conflict",
         },
         500: {
           description: "Server Error",
@@ -75,9 +84,9 @@ exports.offPath = {
           },
         },
       },
-      response: {
+      responses: {
         200: {
-          description: "Discount Seted On All Courses",
+          description: "Success",
         },
         500: {
           description: "Server Error",
@@ -91,7 +100,7 @@ exports.offPath = {
       tags: ["Offs"],
       parameters: [
         {
-          in: "path",
+          in: "query",
           name: "code",
           schema: {
             type: "string",
@@ -117,19 +126,22 @@ exports.offPath = {
       tags: ["Offs"],
       parameters: [
         {
-          in: "path",
+          in: "query",
           name: "id",
           schema: {
-            type: "number",
+            type: "string",
           },
         },
       ],
       responses: {
         200: {
-          description: "Code deleted successfully",
+          description: "Off deleted successfully",
         },
         400: {
-          description: "Code not valid!!",
+          description: "Off not valid!!",
+        },
+        404: {
+          description: "Not Found",
         },
         500: {
           description: "Server Error",

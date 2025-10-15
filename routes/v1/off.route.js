@@ -12,10 +12,10 @@ offRouter
   .route("/all")
   .post(authMiddleware, isAdminMiddleware, offController.setOnAll);
 
-offRouter.route("/:code").post(authMiddleware, offController.getOne);
-
 offRouter
   .route("/:id")
   .delete(authMiddleware, isAdminMiddleware, offController.remove);
+  
+offRouter.route("/:code").post(authMiddleware, offController.getOne);
 
 module.exports = offRouter;
