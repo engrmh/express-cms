@@ -79,9 +79,26 @@ exports.delete = async (req, res) => {
   }
 };
 exports.update = async (req, res) => {
-  //code
-};
+  try {
+    const { id } = req.params;
+    const updatedCourse = await courseModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
+    if (!updatedCourse) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    res.status(200).json({
+      message: "Course updated successfully",
+      course: updatedCourse,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 exports.createSession = async (req, res) => {
   try {
     const { title, time, free } = req.body;

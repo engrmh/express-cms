@@ -4,7 +4,7 @@ const sessionSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: String,
+      required: true,
     },
     time: {
       type: String,
