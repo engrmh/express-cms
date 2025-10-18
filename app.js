@@ -17,6 +17,7 @@ const newsletterRouter = require("./routes/v1/newsletter.route");
 const searchRouter = require("./routes/v1/search.route");
 const notificationRouter = require("./routes/v1/notification.route");
 const offRouter = require("./routes/v1/off.route");
+const articleRouter = require("./routes/v1/article.route");
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use("/v1/newsletter", newsletterRouter);
 app.use("/v1/search", searchRouter);
 app.use("/v1/notification", notificationRouter);
 app.use("/v1/offs", offRouter);
+app.use("/v1/articles", articleRouter);
 
 app.use(
   expressWinston.errorLogger({
