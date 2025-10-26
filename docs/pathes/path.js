@@ -8,6 +8,7 @@ const { contactPath } = require("../pathes/contact");
 const { newsletterPath } = require("../pathes/newsletter");
 const { notificationPath } = require("../pathes/notification");
 const { searchPath } = require("../pathes/search");
+const { articlePath } = require("../pathes/article");
 
 const pathes = {
   ...authPath,
@@ -20,6 +21,7 @@ const pathes = {
   ...searchPath,
   ...notificationPath,
   ...offPath,
+  ...articlePath,
 };
 
 module.exports = pathes;

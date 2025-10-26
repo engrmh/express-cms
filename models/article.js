@@ -43,3 +43,5 @@ const schema = new mongoose.Schema(
 );
 
 const articleModel = mongoose.model("Article", schema);
+
+module.exports = articleModel

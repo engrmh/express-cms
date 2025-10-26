@@ -9,12 +9,13 @@ articleRouter
   .route("/")
   .get(articleController.getAll)
   .post(
-    multer(authMiddleware, {
+    authMiddleware,
+    isAdminMiddleware,
+    multer({
       storage: multerStorage,
       limits: { fileSize: 100_000_000 },
-    }),
+    }).single("cover"),
 
-    isAdminMiddleware,
     articleController.create
   );
 
@@ -23,21 +24,25 @@ articleRouter
   .route("/:id")
   .put(
     authMiddleware,
-    multer({ storage: multerStorage, limits: { fileSize: 100_000_000 } }),
     isAdminMiddleware,
+    multer({
+      storage: multerStorage,
+      limits: { fileSize: 100_000_000 },
+    }).single("cover"),
     articleController.update
   )
   .delete(authMiddleware, isAdminMiddleware, articleController.delete);
 
 articleRouter.route("/:href").get(articleController.getOne);
 
-articleRouter
-  .route("/draft")
-  .post(
-    authMiddleware,
-    multer({ storage: multerStorage, limits: { fieldSize: 100_000_000 } }),
-    isAdminMiddleware,
-    articleController.draft
-  );
+articleRouter.route("/draft").post(
+  authMiddleware,
+  isAdminMiddleware,
+  multer({
+    storage: multerStorage,
+    limits: { fileSize: 100_000_000 },
+  }).single("cover"),
+  articleController.draft
+);
 
 module.exports = articleRouter;
