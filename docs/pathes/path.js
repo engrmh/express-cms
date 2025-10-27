@@ -9,6 +9,7 @@ const { newsletterPath } = require("../pathes/newsletter");
 const { notificationPath } = require("../pathes/notification");
 const { searchPath } = require("../pathes/search");
 const { articlePath } = require("../pathes/article");
+const { orderPath } = require("../pathes/order");
 
 const pathes = {
   ...authPath,
@@ -22,6 +23,7 @@ const pathes = {
   ...notificationPath,
   ...offPath,
   ...articlePath,
+  ...orderPath,
 };
 
 module.exports = pathes;
