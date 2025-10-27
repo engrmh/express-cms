@@ -10,6 +10,7 @@ const { notificationPath } = require("../pathes/notification");
 const { searchPath } = require("../pathes/search");
 const { articlePath } = require("../pathes/article");
 const { orderPath } = require("../pathes/order");
+const { ticketPath } = require("../pathes/ticket");
 
 const pathes = {
   ...authPath,
@@ -24,6 +25,7 @@ const pathes = {
   ...offPath,
   ...articlePath,
   ...orderPath,
+  ...ticketPath,
 };
 
 module.exports = pathes;
